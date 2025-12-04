@@ -34,6 +34,9 @@ public class JournalEntryService {
             old.setTitle(newentry.getTitle()!=null && !newentry.getTitle().isEmpty() ? newentry.getTitle() : old.getTitle());
             journalentryrepositry.save(old);
         }
+        else{
+            journalentryrepositry.save(newentry);
+        }
 
     }
 
