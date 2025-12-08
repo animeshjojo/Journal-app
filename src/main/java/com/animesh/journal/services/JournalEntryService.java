@@ -1,6 +1,7 @@
 package com.animesh.journal.services;
 
 import com.animesh.journal.Entity.JournalEntry;
+import com.animesh.journal.Entity.User;
 import com.animesh.journal.repositry.JournalEntryRepositry;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,33 +17,49 @@ public class JournalEntryService {
     @Autowired
     private JournalEntryRepositry journalentryrepositry;
 
-    public List<JournalEntry> getall(){
+    @Autowired
+    private UserService userservice;
+
+    public List<JournalEntry> getAll(){
         return journalentryrepositry.findAll();
     }
 
-    public void entry(JournalEntry myentry){
-        myentry.setDatetime(LocalDateTime.now());
-        journalentryrepositry.save(myentry);
+    public void entry(JournalEntry myEntry,String username){
+        User user=userservice.findByUserName(username);
+        myEntry.setDatetime(LocalDateTime.now());
+        JournalEntry saved=journalentryrepositry.save(myEntry); //we are taking this instead of myEntry because myEntry doesn't have_id so after saving _id is generated
+        user.getJournalEntries().add(saved);
+        userservice.saveUser(user);
+
     }
 
     public Optional<JournalEntry> findbyid(ObjectId myid){
        return journalentryrepositry.findById(myid);
     }
 
-    public void updatedata(ObjectId myid,JournalEntry newentry){
+    public void updatedata(ObjectId myid, JournalEntry newentry, String username){
         JournalEntry old=journalentryrepositry.findById(myid).orElse(null);
         if(old!=null) {
             old.setContent(newentry.getContent()!=null && !newentry.getContent().isEmpty() ? newentry.getContent() : old.getContent());
-            old.setTitle(newentry.getTitle()!=null && !newentry.getTitle().isEmpty() ? newentry.getTitle() : old.getTitle());
+            old.setTitle(!newentry.getTitle().isEmpty() ? newentry.getTitle() : old.getTitle());
             journalentryrepositry.save(old);
         }
         else{
-            journalentryrepositry.save(newentry);
+            entry(newentry,username);
         }
 
     }
 
-    public void deletebyid(ObjectId myid){
+    public void deletebyid(ObjectId myid, String username)
+    {
+        User user=userservice.findByUserName(username);
+        user.getJournalEntries().removeIf(x-> x.getId().equals(myid));
+        /* The above line is used to delete the reference instantly when the journal is getting deleted from the journal_entries.
+         If we don't do it then in mongsh the jornal entry will be deleted from the journal_entries but the referncce still be
+          showing inside the user however after a next save on the user the dirty read will get fixed and the id will be delted
+          i.e from next save the data will be consistent. This instant delete on both the collections is not happening because
+          mongodb doesnot support cascading delete whereas relational database support it  */
+        userservice.saveUser(user);
         journalentryrepositry.deleteById(myid);
     }
 

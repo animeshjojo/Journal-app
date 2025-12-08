@@ -17,22 +17,22 @@ public class Usercontroller {
     private UserService userservice;
 
     @GetMapping
-    public List<User> getall(){
-       return  userservice.getall();
+    public List<User> getAll(){
+       return  userservice.getAll();
     }
 
     @PostMapping
-    public void createuser(@RequestBody User user){
-        userservice.createuser(user);
+    public void saveUser(@RequestBody User user){
+        userservice.saveUser(user);
     }
 
     @PutMapping("/{username}")
-    public ResponseEntity<?> updateuser(@RequestBody User user,@PathVariable String username){
+    public ResponseEntity<?> updateUser(@RequestBody User user,@PathVariable String username){
         User indB=userservice.findByUserName(username);
         if(indB!=null){
             indB.setUserName(user.getUserName());
             indB.setPassword(user.getPassword());
-            userservice.createuser(indB);
+            userservice.saveUser(indB);
             return new ResponseEntity<>(HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);

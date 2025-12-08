@@ -16,11 +16,11 @@ public class UserService {
     @Autowired
     private UserRepositry userRepositry;
 
-    public List<User> getall(){
+    public List<User> getAll(){
         return userRepositry.findAll();
     }
 
-    public void createuser(User user){
+    public void saveUser(User user){
         user.setDatetime(LocalDateTime.now());
         userRepositry.save(user);
     }

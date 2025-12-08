@@ -1,26 +1,31 @@
 package com.animesh.journal.controller;
 
 import com.animesh.journal.Entity.JournalEntry;
+import com.animesh.journal.Entity.User;
 import com.animesh.journal.services.JournalEntryService;
+import com.animesh.journal.services.UserService;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.*;
 
 @RestController
 @RequestMapping("/journal")
-public class JournalEntryControllerv2 {
+public class JournalEntryControllerV2 {
 
     @Autowired
     private JournalEntryService journalentryservice;
 
-    @GetMapping
-    public ResponseEntity<?> getall(){
-        List<JournalEntry> data=journalentryservice.getall();
+    @Autowired
+    private UserService userservice;
+
+    @GetMapping("{username}")
+    public ResponseEntity<?> getAllJournalEntriesOfUser(@PathVariable String username){
+        User user=userservice.findByUserName(username);
+        List<JournalEntry> data=user.getJournalEntries();
         if(data!=null && !data.isEmpty()){
             return new ResponseEntity<>(data,HttpStatus.OK);
         }
@@ -29,10 +34,10 @@ public class JournalEntryControllerv2 {
         }
     }
 
-    @PostMapping
-    public ResponseEntity<?> journalentry(@RequestBody JournalEntry myentry){
+    @PostMapping("{username}")
+    public ResponseEntity<?> journalEntry(@RequestBody JournalEntry myEntry,@PathVariable String username){
         try {
-            journalentryservice.entry(myentry);
+            journalentryservice.entry(myEntry,username);
             return new ResponseEntity<>(HttpStatus.CREATED);
         }
         catch(Exception e){
@@ -53,20 +58,20 @@ public class JournalEntryControllerv2 {
 
     }
 
-    @PutMapping("/id/{myid}")
-    public ResponseEntity<?> update(@PathVariable ObjectId myid,@RequestBody JournalEntry newentry){
-        journalentryservice.updatedata(myid,newentry);
+    @PutMapping("/id/{username}/{myid}")
+    public ResponseEntity<?> update(@PathVariable ObjectId myid,@RequestBody JournalEntry newentry,@PathVariable String username){
+        journalentryservice.updatedata(myid,newentry,username);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @DeleteMapping("id/{myid}")
-    public ResponseEntity<?> deletentry(@PathVariable ObjectId myid){
+    @DeleteMapping("id/{username}/{myid}")
+    public ResponseEntity<?> deleteEntry(@PathVariable ObjectId myid,@PathVariable String username){
         if(journalentryservice.findbyid(myid).orElse(null)==null){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         else{
-            journalentryservice.deletebyid(myid);
-            return new ResponseEntity<>(HttpStatus.OK);
+            journalentryservice.deletebyid(myid,username);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
     }
 }
