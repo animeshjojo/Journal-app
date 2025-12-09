@@ -6,6 +6,7 @@ import com.animesh.journal.repositry.JournalEntryRepositry;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -24,12 +25,22 @@ public class JournalEntryService {
         return journalentryrepositry.findAll();
     }
 
+    @Transactional
     public void entry(JournalEntry myEntry,String username){
-        User user=userservice.findByUserName(username);
-        myEntry.setDatetime(LocalDateTime.now());
-        JournalEntry saved=journalentryrepositry.save(myEntry); //we are taking this instead of myEntry because myEntry doesn't have_id so after saving _id is generated
-        user.getJournalEntries().add(saved);
-        userservice.saveUser(user);
+        try{
+            User user=userservice.findByUserName(username);
+            myEntry.setDatetime(LocalDateTime.now());
+            JournalEntry saved=journalentryrepositry.save(myEntry); //we are taking this instead of myEntry because myEntry doesn't have_id so after saving _id is generated
+            user.getJournalEntries().add(saved);
+        /* suppose after the above line exception occurs or error due to any code. For ex if we set username to null.
+           So the next line that is to save the user will not take place in the db. This doesnt follow atomicity
+           To handle this we make the while method as a Transaction. So either the whole block will be executed or none*/
+            userservice.saveUser(user);
+        }
+        catch(Exception e){
+            throw new RuntimeException("Some exception occurred during saving entries");
+        }
+
 
     }
 
