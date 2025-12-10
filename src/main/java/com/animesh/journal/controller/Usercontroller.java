@@ -5,6 +5,8 @@ import com.animesh.journal.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,8 +28,9 @@ public class Usercontroller {
         userservice.saveUser(user);
     }
 
-    @PutMapping("/{username}")
-    public ResponseEntity<?> updateUser(@RequestBody User user,@PathVariable String username){
+    @PutMapping("/update-user}")
+    public ResponseEntity<?> updateUser(@RequestBody User user){
+        String username=SecurityContextHolder.getContext().getAuthentication().getName();
         User indB=userservice.findByUserName(username);
         if(indB!=null){
             indB.setUserName(user.getUserName());

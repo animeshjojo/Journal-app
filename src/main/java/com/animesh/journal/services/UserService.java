@@ -4,6 +4,8 @@ import com.animesh.journal.Entity.User;
 import com.animesh.journal.repositry.UserRepositry;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -16,12 +18,15 @@ public class UserService {
     @Autowired
     private UserRepositry userRepositry;
 
+    private static final PasswordEncoder encoder = new BCryptPasswordEncoder();
+
     public List<User> getAll(){
         return userRepositry.findAll();
     }
 
     public void saveUser(User user){
         user.setDatetime(LocalDateTime.now());
+        user.setPassword(encoder.encode(user.getPassword()));
         userRepositry.save(user);
     }
 

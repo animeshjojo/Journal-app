@@ -38,4 +38,5 @@ public class User {
     */
     private List<JournalEntry> journalEntries=new ArrayList<>();
     //new arraylist will ensure that the list is empty not null when a user will be initialised
+    private List<String> roles;
 }
