@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,6 +28,7 @@ public class UserService {
     public void saveUser(User user){
         user.setDatetime(LocalDateTime.now());
         user.setPassword(encoder.encode(user.getPassword()));
+        user.setRoles(Arrays.asList("USER"));
         userRepositry.save(user);
     }
 
@@ -42,5 +44,7 @@ public class UserService {
     public User findByUserName(String UserName){
         return userRepositry.findByUserName(UserName);
     }
+
+    public void deletebyusername(String username){ userRepositry.deleteByUserName(username); }
 
 }

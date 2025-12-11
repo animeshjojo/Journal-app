@@ -36,7 +36,7 @@ public class SpringSecurity {
     }
 
     @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+    protected void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
     }
 
@@ -46,3 +46,26 @@ public class SpringSecurity {
     }
 }
 
+/*
+Flow-->
+1)Request arrives with Basic auth header.
+2)Spring Security extracts username + password.
+3)Calls your UserDetailsServiceImpl.loadUserByUsername().
+4)You fetch user from DB and return username, hashed password, roles.
+5)Spring compares raw password with hashed password using BCrypt.
+6)If match → user authenticated.
+7)Spring checks roles for the requested URL.
+8)If allowed → controller executes.
+*/
+
+/*
+CSRF (Cross-Site Request Forgery) is an attack where a malicious website tricks a logged-in user’s browser into sending requests (like POST/DELETE) to another site without the user knowing.
+This works only when the browser automatically sends cookies.
+
+Spring Security protects against this by requiring a CSRF token for such requests.
+
+But in REST APIs, we usually use JWT or Basic Auth, not cookies — the browser does not automatically send anything.
+So CSRF attacks cannot happen, and CSRF protection becomes unnecessary.
+
+👉 Therefore, we disable CSRF for REST APIs.
+*/

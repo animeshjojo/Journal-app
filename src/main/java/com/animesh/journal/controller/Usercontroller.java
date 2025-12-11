@@ -18,17 +18,8 @@ public class Usercontroller {
     @Autowired
     private UserService userservice;
 
-    @GetMapping
-    public List<User> getAll(){
-       return  userservice.getAll();
-    }
 
-    @PostMapping
-    public void saveUser(@RequestBody User user){
-        userservice.saveUser(user);
-    }
-
-    @PutMapping("/update-user}")
+    @PutMapping
     public ResponseEntity<?> updateUser(@RequestBody User user){
         String username=SecurityContextHolder.getContext().getAuthentication().getName();
         User indB=userservice.findByUserName(username);
@@ -40,4 +31,12 @@ public class Usercontroller {
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
+    @DeleteMapping
+    public ResponseEntity<?> deleteUser(){
+        String username=SecurityContextHolder.getContext().getAuthentication().getName();
+        userservice.deletebyusername(username);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
 }
