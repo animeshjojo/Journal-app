@@ -5,11 +5,8 @@ import com.animesh.journal.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/user")
@@ -23,13 +20,15 @@ public class Usercontroller {
     public ResponseEntity<?> updateUser(@RequestBody User user){
         String username=SecurityContextHolder.getContext().getAuthentication().getName();
         User indB=userservice.findByUserName(username);
-        if(indB!=null){
-            indB.setUserName(user.getUserName());
-            indB.setPassword(user.getPassword());
+        indB.setUserName(user.getUserName().isEmpty()? username:user.getUserName());
+        indB.setPassword(user.getPassword().isEmpty()? indB.getPassword():user.getPassword());
+        if(user.getPassword().isEmpty()){
             userservice.saveUser(indB);
-            return new ResponseEntity<>(HttpStatus.OK);
         }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        else{
+            userservice.saveNewUser(indB);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping

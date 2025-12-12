@@ -25,10 +25,14 @@ public class UserService {
         return userRepositry.findAll();
     }
 
-    public void saveUser(User user){
+    public void saveNewUser(User user){
         user.setDatetime(LocalDateTime.now());
         user.setPassword(encoder.encode(user.getPassword()));
         user.setRoles(Arrays.asList("USER"));
+        userRepositry.save(user);
+    }
+
+    public void saveUser(User user){
         userRepositry.save(user);
     }
 

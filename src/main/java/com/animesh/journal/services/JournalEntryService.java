@@ -61,17 +61,30 @@ public class JournalEntryService {
 
     }
 
-    public void deletebyid(ObjectId myid, String username)
+    @Transactional
+    public boolean deletebyid(ObjectId myid, String username)
     {
-        User user=userservice.findByUserName(username);
-        user.getJournalEntries().removeIf(x-> x.getId().equals(myid));
+        boolean flag=false;
+        try {
+            User user=userservice.findByUserName(username);
+            flag=user.getJournalEntries().removeIf(x-> x.getId().equals(myid));
         /* The above line is used to delete the reference instantly when the journal is getting deleted from the journal_entries.
          If we don't do it then in mongsh the jornal entry will be deleted from the journal_entries but the referncce still be
           showing inside the user however after a next save on the user the dirty read will get fixed and the id will be delted
           i.e from next save the data will be consistent. This instant delete on both the collections is not happening because
           mongodb doesnot support cascading delete whereas relational database support it  */
-        userservice.saveUser(user);
-        journalentryrepositry.deleteById(myid);
+
+            if(flag) {
+                userservice.saveUser(user);
+                journalentryrepositry.deleteById(myid);
+            }
+        }
+        catch (Exception e){
+            throw new RuntimeException("Some exception occurred during deleting entries");
+        }
+        return flag;
+
+
     }
 
 
