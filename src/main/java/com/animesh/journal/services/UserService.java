@@ -31,6 +31,12 @@ public class UserService {
         user.setRoles(Arrays.asList("USER"));
         userRepositry.save(user);
     }
+    public void createAdmin(User user){
+        user.setDatetime(LocalDateTime.now());
+        user.setPassword(encoder.encode(user.getPassword()));
+        user.setRoles(Arrays.asList("USER","ADMIN"));
+        userRepositry.save(user);
+    }
 
     public void saveUser(User user){
         userRepositry.save(user);
