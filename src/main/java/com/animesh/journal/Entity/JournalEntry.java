@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Data
 public class JournalEntry {
 
-    @Id
+    @Id //primaryKey
     private ObjectId id;
 
     @NonNull

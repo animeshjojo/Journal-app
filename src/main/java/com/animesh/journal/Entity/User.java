@@ -20,7 +20,7 @@ public class User {
     private ObjectId id;
 
     @Indexed(unique = true) //this will ensure every username is unique
-    @NonNull // Lombok property that ensure that the fiels is notnull
+    @NonNull // Lombok property that ensure that the file is notnull
     private String userName;
     @NonNull
     private String password;
