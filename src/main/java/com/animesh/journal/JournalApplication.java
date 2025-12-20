@@ -10,6 +10,7 @@ import org.springframework.data.mongodb.MongoDatabaseFactory;
 import org.springframework.data.mongodb.MongoTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
 @EnableTransactionManagement //This find the block that has @Transaction annotations and make a container of it called transaction context. It performs commit and rollback
@@ -34,7 +35,10 @@ public class JournalApplication {
         Spring does not talk directly to MongoDB.
         Instead, it asks MongoDatabaseFactory → “give me the DB connection”.
         MongoTransactionManager uses this factory to start/commit transactions.*/
-
+       @Bean
+       public RestTemplate restTemplate(){
+           return new RestTemplate();
+       }
 }
 
 //PlatformTransactionManager is an interface that contains this commit and rollback functions.
