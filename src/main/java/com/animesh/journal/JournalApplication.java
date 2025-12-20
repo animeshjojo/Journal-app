@@ -39,6 +39,9 @@ public class JournalApplication {
        public RestTemplate restTemplate(){
            return new RestTemplate();
        }
+
+       /* We create the bean so that Spring can create, manage, and inject the RestTemplate object wherever @Autowired is used.
+          Without defining it, Spring doesn’t know how to create that object. */
 }
 
 //PlatformTransactionManager is an interface that contains this commit and rollback functions.
