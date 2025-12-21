@@ -21,18 +21,12 @@ public class Usercontroller {
     private WeatherService weatherservice;
 
     @PutMapping
-    public ResponseEntity<?> updateUser(@RequestBody User user){
+    public void updateUser(@RequestBody User user){
         String username=SecurityContextHolder.getContext().getAuthentication().getName();
         User indB=userservice.findByUserName(username);
-        indB.setUserName(user.getUserName().isEmpty()? username:user.getUserName());
-        indB.setPassword(user.getPassword().isEmpty()? indB.getPassword():user.getPassword());
-        if(user.getPassword().isEmpty()){
-            userservice.saveUser(indB);
-        }
-        else{
-            userservice.saveNewUser(indB);
-        }
-        return new ResponseEntity<>(HttpStatus.OK);
+        //indB.setUserName(user.getUserName().isEmpty()? username:user.getUserName()); we disabled this because user cant change its username
+        indB.setPassword(user.getPassword());
+        userservice.saveNewUser(indB);
     }
 
     @DeleteMapping

@@ -17,3 +17,15 @@ server:
     context=path: /app
 
 
+#logging:
+ # level:
+  #  com:
+   #   animesh:
+    #    journal: debug
+
+#logging:
+  #level:
+    #root or package name: off   It turns of all log for particular package or whole root appliaction
+
+# severity of logging->  Low to high
+# Trace-> Debug -> Info -> Warn -> Error

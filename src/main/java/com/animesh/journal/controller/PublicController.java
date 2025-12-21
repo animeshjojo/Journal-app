@@ -2,7 +2,10 @@ package com.animesh.journal.controller;
 
 import com.animesh.journal.Entity.User;
 import com.animesh.journal.services.UserService;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -20,7 +23,14 @@ public class PublicController {
     }
 
     @PostMapping("create-user")
-    public void saveUser(@RequestBody User user){
-        userService.saveNewUser(user);
+    public ResponseEntity<?> saveUser(@RequestBody User user){
+
+        boolean b=userService.saveNewUser(user);
+        if(b){
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        }
+        else{
+            return new ResponseEntity<>("Username already taken",HttpStatus.BAD_REQUEST);
+        }
     }
 }

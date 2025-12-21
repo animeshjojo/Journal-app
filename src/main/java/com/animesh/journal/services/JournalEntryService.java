@@ -4,6 +4,8 @@ import com.animesh.journal.Entity.JournalEntry;
 import com.animesh.journal.Entity.User;
 import com.animesh.journal.repositry.JournalEntryRepositry;
 import org.bson.types.ObjectId;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,12 +23,13 @@ public class JournalEntryService {
     @Autowired
     private UserService userservice;
 
+
     public List<JournalEntry> getAll(){
         return journalentryrepositry.findAll();
     }
 
     @Transactional
-    public void entry(JournalEntry myEntry,String username){
+    public void saveEntry(JournalEntry myEntry, String username){
         try{
             User user=userservice.findByUserName(username);
             myEntry.setDatetime(LocalDateTime.now());
@@ -56,7 +59,7 @@ public class JournalEntryService {
             journalentryrepositry.save(old);
         }
         else{
-            entry(newentry,username);
+            saveEntry(newentry,username);
         }
 
     }

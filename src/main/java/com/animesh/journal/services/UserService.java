@@ -2,7 +2,10 @@ package com.animesh.journal.services;
 
 import com.animesh.journal.Entity.User;
 import com.animesh.journal.repositry.UserRepositry;
+import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,6 +17,8 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
+@Slf4j
+//Logging is the process of recording application activities and errors to help developers monitor and debug the software.
 public class UserService {
 
     @Autowired
@@ -21,15 +26,30 @@ public class UserService {
 
     private static final PasswordEncoder encoder = new BCryptPasswordEncoder();
 
+    public static final Logger logger = LoggerFactory.getLogger(UserService.class);
+    //It creates a class-specific logger so every log message is tagged with JournalEntryService in the log output.
+
     public List<User> getAll(){
         return userRepositry.findAll();
     }
 
-    public void saveNewUser(User user){
-        user.setDatetime(LocalDateTime.now());
-        user.setPassword(encoder.encode(user.getPassword()));
-        user.setRoles(Arrays.asList("USER"));
-        userRepositry.save(user);
+    public boolean saveNewUser(User user){
+        try{
+            user.setDatetime(LocalDateTime.now());
+            user.setPassword(encoder.encode(user.getPassword()));
+            user.setRoles(Arrays.asList("USER"));
+            userRepositry.save(user);
+            return true;
+        }
+        catch(Exception e){
+            //logger.error("Error saving user",e);
+           // log.warn("Error saving user {} ",user.getUserName());
+            log.error("Error saving user {} ",user.getUserName());
+            //log.trace("Error saving user {} ",user.getUserName());// trace and debug are not enabled by default. We have to enable it in application properties
+            //log.debug("Error saving user {} ",user.getUserName());
+            return false;
+        }
+
     }
     public void createAdmin(User user){
         user.setDatetime(LocalDateTime.now());

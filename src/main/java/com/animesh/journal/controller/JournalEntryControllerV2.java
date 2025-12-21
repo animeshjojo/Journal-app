@@ -40,7 +40,7 @@ public class JournalEntryControllerV2 {
     public ResponseEntity<?> journalEntry(@RequestBody JournalEntry myEntry){
         try {
             String username=SecurityContextHolder.getContext().getAuthentication().getName();
-            journalentryservice.entry(myEntry,username);
+            journalentryservice.saveEntry(myEntry,username);
             return new ResponseEntity<>(HttpStatus.CREATED);
         }
         catch(Exception e){

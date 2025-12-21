@@ -15,8 +15,8 @@ public class WeatherResponse {
 
         public int temperature;
 
-        @JsonProperty("weather_descriptions")
-        public List<String> weatherDescriptions;
+        @JsonProperty("weather_descriptions") //snakecase
+        public List<String> weatherDescriptions; //camelcase
 
         public int feelslike;
     }
