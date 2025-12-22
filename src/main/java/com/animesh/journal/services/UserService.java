@@ -24,7 +24,7 @@ What it is: A logging API (interface), not a real logger
 Full form: Simple Logging Facade for Java
 Role: Acts like a remote control
 Does NOT write logs itself
-Works with Logback, Log4j2, java.util.logging, etc.
+Works with Logback, Log4j2, java.util.logging, etc. frameworks
 Logback is the default logging implementation that Spring Boot auto-configures for SLF4J.
 Logback is not a class implementing SLF4J, but a framework that provides SLF4J bindings.
 */

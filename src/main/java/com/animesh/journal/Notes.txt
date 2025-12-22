@@ -1,0 +1,7 @@
+we can use pipedream to automate workflow
+for ex we want to have english dubbing on our hindi video
+flow->
+-->set trigger when ever we upload a video
+--> download the mp4 video and send the video to chat gpt api as request body to convert video to txt
+--> chatgpt sends the response as txt and then we send txt to  elevenlabs api to convert to txt to speech(english)
+--> after speech is received mail to the editor that voice is ready to get dubbed
