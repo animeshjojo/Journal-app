@@ -3,21 +3,26 @@ package com.animesh.journal.services;
 import com.animesh.journal.Entity.User;
 import com.animesh.journal.api.response.WeatherResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 
-@Component
+//@Component
+@Service //We can also use @Component but @Service gives better readibility to developer that this is a service containing business logic
 public class WeatherService {
 
     @Autowired
     RestTemplate restTemplate; // this will allow us to send http request and get respones
-    public static final String KEY="b45e9cca79df3ae436161109f1bb6e41";
+
+    @Value("${weather.api.key}")
+    public String KEY;
 
     public static String API="http://api.weatherstack.com/current?access_key=KEY&query=CITY"; //this the api endpoint we have got from the documentation page of the weather website
 
