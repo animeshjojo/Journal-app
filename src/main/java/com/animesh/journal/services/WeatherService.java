@@ -1,5 +1,6 @@
 package com.animesh.journal.services;
 
+import com.animesh.journal.Cache.AppCache;
 import com.animesh.journal.Entity.User;
 import com.animesh.journal.api.response.WeatherResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +25,12 @@ public class WeatherService {
     @Value("${weather.api.key}")
     public String KEY;
 
-    public static String API="http://api.weatherstack.com/current?access_key=KEY&query=CITY"; //this the api endpoint we have got from the documentation page of the weather website
-
+    //public static String API=""; //this the api endpoint we have got from the documentation page of the weather website
+    @Autowired
+    AppCache appCache;
 
     public WeatherResponse getWeather(String city){
-        String final_api=API.replace("KEY",KEY).replace("CITY",city);
+        String final_api=appCache.APPCACHE.get("weather_api").replace("<api_key>",KEY).replace("<city>",city);
         //HttpHeaders headers = new HttpHeaders();
         //headers.set("key","value");
         //User user=User.builder().userName("Animesh").password("123").build();
