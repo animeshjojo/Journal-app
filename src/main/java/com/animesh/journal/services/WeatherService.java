@@ -22,15 +22,15 @@ public class WeatherService {
     @Autowired
     RestTemplate restTemplate; // this will allow us to send http request and get respones
 
-    @Value("${weather.api.key}")
-    public String KEY;
+    //@Value("${weather.api.key}")
+    //public String KEY;
 
     //public static String API=""; //this the api endpoint we have got from the documentation page of the weather website
     @Autowired
     AppCache appCache;
 
     public WeatherResponse getWeather(String city){
-        String final_api=appCache.APPCACHE.get("weather_api").replace("<api_key>",KEY).replace("<city>",city);
+        String final_api=appCache.APPCACHE.get("weather_api").replace("<city>",city);
         //HttpHeaders headers = new HttpHeaders();
         //headers.set("key","value");
         //User user=User.builder().userName("Animesh").password("123").build();

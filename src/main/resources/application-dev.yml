@@ -7,6 +7,19 @@ spring:
       auto-index-creation: true
   main:
     allow-circular-references: true
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: XXX@gmail.com
+    password: XXXX XXXX XXXX XXXX
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+
 server:
   port: 8080
   servlet:
