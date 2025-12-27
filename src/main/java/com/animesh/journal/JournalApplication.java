@@ -8,12 +8,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
 import org.springframework.data.mongodb.MongoDatabaseFactory;
 import org.springframework.data.mongodb.MongoTransactionManager;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
-@EnableTransactionManagement //This find the block that has @Transaction annotations and make a container of it called transaction context. It performs commit and rollback
+@EnableTransactionManagement//This find the block that has @Transaction annotations and make a container of it called transaction context. It performs commit and rollback
+@EnableScheduling
 public class JournalApplication {
 
 	public static void main(String[] args) {
