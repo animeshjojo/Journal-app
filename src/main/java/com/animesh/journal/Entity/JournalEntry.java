@@ -1,5 +1,6 @@
 package com.animesh.journal.Entity;
 
+import com.animesh.journal.enums.Sentiment;
 import lombok.Data;
 import lombok.NonNull;
 import org.bson.types.ObjectId;
@@ -19,5 +20,5 @@ public class JournalEntry {
     private String title;
     private String content;
     private LocalDateTime datetime;
-
+    private Sentiment sentiment;
 }
