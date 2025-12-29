@@ -2,6 +2,7 @@ package com.animesh.journal.Scheduler;
 
 import com.animesh.journal.Entity.JournalEntry;
 import com.animesh.journal.Entity.User;
+import com.animesh.journal.enums.Sentiment;
 import com.animesh.journal.repositry.UserRepositryImpl;
 import com.animesh.journal.services.EmailService;
 import com.animesh.journal.services.SentimentAnalysisService;
@@ -31,9 +32,8 @@ public class UserScheduler {
         List<User> data=userRepositryImpl.getUserForSA();
         for(User user:data){
             List<JournalEntry> journalentry=user.getJournalEntries();
-            List<String> filteredentries=journalentry.stream().filter(x -> x.getDatetime().isAfter((LocalDateTime.now().minus(7, ChronoUnit.DAYS)))).map(x-> x.getContent()).collect(Collectors.toList());
-            String sentiment=String.join(" ",filteredentries);
-            emailService.sendEmail(user.getEmail(),"Sentiment Analysis For the Week",sentimentAnalysisService.sentimentAnalysis(sentiment));
+            List<Sentiment> filteredentries=journalentry.stream().filter(x -> x.getDatetime().isAfter((LocalDateTime.now().minus(7, ChronoUnit.DAYS)))).map(x-> x.getSentiment()).collect(Collectors.toList());
+            emailService.sendEmail(user.getEmail(),"Sentiment Analysis For the Week",sentimentAnalysisService.sentimentAnalysis(filteredentries));
         }
     }
 
