@@ -3,6 +3,9 @@ spring:
     uri: mongodb+srv://animeshjojo:Wb0UB9jfipuxNXgA@cluster0.smqbtnc.mongodb.net/?appName=Cluster0
     database: journaldb
   data:
+    redis:
+      host: 127.0.0.1
+      port: 6379
     mongodb:
       auto-index-creation: true
   main:
