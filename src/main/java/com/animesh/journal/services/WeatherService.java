@@ -29,17 +29,29 @@ public class WeatherService {
     @Autowired
     AppCache appCache;
 
-    public WeatherResponse getWeather(String city){
-        String final_api=appCache.APPCACHE.get("weather_api").replace("<city>",city);
+    @Autowired
+    RedisService redisService;
+
+    public WeatherResponse getWeather(String city) {
         //HttpHeaders headers = new HttpHeaders();
         //headers.set("key","value");
         //User user=User.builder().userName("Animesh").password("123").build();
         //HttpEntity<User> httpEntity=new HttpEntity<>(user,headers);
-       // ResponseEntity<WeatherResponse> response=restTemplate.exchange(final_api, HttpMethod.POST,httpEntity, WeatherResponse.class);
+        // ResponseEntity<WeatherResponse> response=restTemplate.exchange(final_api, HttpMethod.POST,httpEntity, WeatherResponse.class);
 
         //Like GET call to a external API we can also call POST by sending a HTTPEntity in the rewuest entity
         //Http Entiy contains body and headers.
-        ResponseEntity<WeatherResponse> response=restTemplate.exchange(final_api, HttpMethod.GET,null, WeatherResponse.class);
-        return response.getBody();
+        WeatherResponse weatherResponse = redisService.get("weather_of_" + city, WeatherResponse.class);
+        if (weatherResponse != null) {
+            return weatherResponse;
+        } else {
+            String final_api = appCache.APPCACHE.get("weather_api").replace("<city>", city);
+            ResponseEntity<WeatherResponse> response = restTemplate.exchange(final_api, HttpMethod.POST, null, WeatherResponse.class);
+            WeatherResponse body = response.getBody();
+            if (body != null) {
+                redisService.set("weather_of_" + city, body, 300l);
+            }
+            return body;
+        }
     }
 }
