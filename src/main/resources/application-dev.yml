@@ -4,8 +4,9 @@ spring:
     database: journaldb
   data:
     redis:
-      host: 127.0.0.1
-      port: 6379
+      host: redis-10644.c10.us-east-1-2.ec2.cloud.redislabs.com
+      port: 10644
+      password: BCOaaCMzn64sITlg4cfbv0bcNRUhFaYj
     mongodb:
       auto-index-creation: true
   main:

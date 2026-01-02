@@ -12,7 +12,6 @@ public class RedisConfigTests {
     @Autowired
     private RedisTemplate redisTemplate;
 
-    @Disabled
     @Test
     public void redisConfigTest(){
        redisTemplate.opsForValue().set("key","value");
