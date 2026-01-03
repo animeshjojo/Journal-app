@@ -1,12 +1,12 @@
 spring:
   mongodb:
-    uri: mongodb+srv://animeshjojo:Wb0UB9jfipuxNXgA@cluster0.smqbtnc.mongodb.net/?appName=Cluster0
+    uri: ${MONGODB_URI}
     database: journaldb
   data:
     redis:
-      host: redis-10644.c10.us-east-1-2.ec2.cloud.redislabs.com
+      host: ${REDIS_PORT}
       port: 10644
-      password: BCOaaCMzn64sITlg4cfbv0bcNRUhFaYj
+      password: ${REDIS_PASSWORD}
     mongodb:
       auto-index-creation: true
   main:
