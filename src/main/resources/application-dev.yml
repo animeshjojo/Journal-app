@@ -4,8 +4,8 @@ spring:
     database: journaldb
   data:
     redis:
-      host: ${REDIS_PORT}
-      port: 10644
+      host: ${REDIS_HOST}
+      port: 12612
       password: ${REDIS_PASSWORD}
     mongodb:
       auto-index-creation: true

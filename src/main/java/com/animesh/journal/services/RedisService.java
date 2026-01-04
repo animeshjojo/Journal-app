@@ -18,8 +18,7 @@ public class RedisService {
     public <T> T get(String key, Class<T> entityClass) {
         try {
             Object o = redisTemplate.opsForValue().get(key);
-            ObjectMapper mapper = new ObjectMapper();
-            return mapper.readValue(o.toString(), entityClass);
+            return entityClass.cast(o);
         } catch (Exception e) {
             log.error("Exception ", e);
             return null;
@@ -28,13 +27,9 @@ public class RedisService {
 
     public void set(String key, Object o, Long ttl) {
         try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            String jsonValue = objectMapper.writeValueAsString(o);
-            redisTemplate.opsForValue().set(key, jsonValue, ttl, TimeUnit.SECONDS);
+            redisTemplate.opsForValue().set(key, o, ttl, TimeUnit.SECONDS);
         } catch (Exception e) {
             log.error("Exception ", e);
         }
     }
-
-
 }
