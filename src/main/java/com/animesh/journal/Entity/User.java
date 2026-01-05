@@ -27,7 +27,7 @@ public class User {
     @NonNull
     private String password;
     private String email;
-    private boolean sentimentAnalysis;
+    private Boolean sentimentAnalysis;
     private LocalDateTime datetime;
     @DBRef //act as a foreign key. establishes a connection between two collection.
     /*
