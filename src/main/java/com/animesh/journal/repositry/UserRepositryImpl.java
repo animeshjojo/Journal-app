@@ -1,17 +1,23 @@
 package com.animesh.journal.repositry;
 
 import com.animesh.journal.Entity.User;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
 public class UserRepositryImpl {
 
-    @Autowired
+
     private MongoTemplate mongoTemplate;
+
+
+    public UserRepositryImpl(MongoTemplate mongoTemplate) {
+        this.mongoTemplate = mongoTemplate;
+    }
 
     public List<User> getUserForSA(){
         Query query=new Query();
