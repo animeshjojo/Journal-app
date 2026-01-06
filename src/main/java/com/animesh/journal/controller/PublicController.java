@@ -7,6 +7,7 @@ import com.animesh.journal.utils.JwtUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -41,7 +42,7 @@ public class PublicController {
 
         boolean b=userService.saveNewUser(user);
         if(b){
-            return new ResponseEntity<>(HttpStatus.CREATED);
+            return new ResponseEntity<>(user.getUserName()+" Created",HttpStatus.CREATED);
         }
         else{
             return new ResponseEntity<>("Username already taken",HttpStatus.BAD_REQUEST);
@@ -63,5 +64,13 @@ public class PublicController {
     @GetMapping
     public String getinfo(@RequestBody String prompt){
        return aiService.getinfo(prompt);
+    }
+
+    @GetMapping("/redirect")
+    public ResponseEntity<?> redirect(){
+        return ResponseEntity
+                .status(HttpStatus.MOVED_PERMANENTLY)
+                .header(HttpHeaders.LOCATION, "https://www.google.co.in")
+                .build();
     }
 }
