@@ -1,5 +1,6 @@
 package com.animesh.journal.controller;
 
+import com.animesh.journal.Dto.UserDto;
 import com.animesh.journal.Entity.User;
 import com.animesh.journal.services.AIService;
 import com.animesh.journal.services.UserService;
@@ -49,11 +50,11 @@ public class PublicController {
         }
     }
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody User user) {
+    public ResponseEntity<String> login(@RequestBody UserDto userdto) {
         try{
             authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(user.getUserName(), user.getPassword()));
-            String jwt = jwtUtil.generateToken(user.getUserName());
+                    new UsernamePasswordAuthenticationToken(userdto.getUserName(), userdto.getPassword()));
+            String jwt = jwtUtil.generateToken(userdto.getUserName());
             return new ResponseEntity<>(jwt, HttpStatus.OK);
         }catch (Exception e){
             log.error("Exception occurred while createAuthenticationToken ", e);
