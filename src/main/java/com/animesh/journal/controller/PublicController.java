@@ -1,9 +1,12 @@
 package com.animesh.journal.controller;
 
+import com.animesh.journal.Dto.LoginResponseDto;
 import com.animesh.journal.Dto.UserDto;
 import com.animesh.journal.Entity.User;
+import com.animesh.journal.api.response.WeatherResponse;
 import com.animesh.journal.services.AIService;
 import com.animesh.journal.services.UserService;
+import com.animesh.journal.services.WeatherService;
 import com.animesh.journal.utils.JwtUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +28,7 @@ public class PublicController {
     private UserService userService;
 
     @Autowired
-    private AIService  aiService;
+    private WeatherService weatherService;
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -50,28 +53,22 @@ public class PublicController {
         }
     }
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody UserDto userdto) {
+    public ResponseEntity<?> login(@RequestBody UserDto userdto) {
         try{
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(userdto.getUserName(), userdto.getPassword()));
             String jwt = jwtUtil.generateToken(userdto.getUserName());
-            return new ResponseEntity<>(jwt, HttpStatus.OK);
+            User user=userService.findByUserName(userdto.getUserName());
+            WeatherResponse weatherResponse= weatherService.getWeather(user.getCity());
+            String message="Hi "+user.getUserName()+"!";
+            if(weatherResponse!=null){
+                message="Hi "+user.getUserName()+"!"+" Today's weather at "+user.getCity()+"is "+weatherResponse.getCurrent().getTemperature();
+            }
+            return new ResponseEntity<>(new LoginResponseDto(message,jwt), HttpStatus.OK);
         }catch (Exception e){
             log.error("Exception occurred while createAuthenticationToken ", e);
             return new ResponseEntity<>("Incorrect username or password", HttpStatus.BAD_REQUEST);
         }
     }
 
-    @GetMapping
-    public String getinfo(@RequestBody String prompt){
-       return aiService.getinfo(prompt);
-    }
-
-    @GetMapping("/redirect")
-    public ResponseEntity<?> redirect(){
-        return ResponseEntity
-                .status(HttpStatus.MOVED_PERMANENTLY)
-                .header(HttpHeaders.LOCATION, "https://www.google.co.in")
-                .build();
-    }
 }

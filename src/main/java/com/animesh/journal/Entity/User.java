@@ -29,6 +29,7 @@ public class User {
     private String email;
     private Boolean sentimentAnalysis;
     private LocalDateTime datetime;
+    private String city;
     @DBRef //act as a foreign key. establishes a connection between two collection.
     /*
       here in the list, it does not store all the data of the journal entry
