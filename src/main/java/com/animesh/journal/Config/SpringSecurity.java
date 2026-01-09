@@ -26,11 +26,9 @@ public class SpringSecurity {
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
 
-    @Autowired
-    private JwtFilter jwtFilter;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtFilter jwtFilter) throws Exception {
 
         return http.authorizeHttpRequests(request -> request
                         .requestMatchers("/public/**","/swagger-ui/**",  "/v3/api-docs/**").permitAll()

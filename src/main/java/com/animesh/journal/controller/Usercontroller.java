@@ -36,16 +36,4 @@ public class Usercontroller {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @GetMapping
-    public String greetings(){
-        String username=SecurityContextHolder.getContext().getAuthentication().getName();
-        WeatherResponse weatherResponse= weatherservice.getWeather("Kolkata");
-        //later we can add a field city in user entity and fetch the city from the entity
-        String greeting="";
-        if(weatherResponse!=null){
-            greeting="Today's Weather at Kolkata is: "+weatherResponse.current.getTemperature();
-        }
-        return "Welcome "+username+". "+greeting;
-    }
-
 }

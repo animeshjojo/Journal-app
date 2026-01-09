@@ -77,10 +77,6 @@ public class UserService {
     }
 
 
-    public void deletebyid(ObjectId myid){
-        userRepositry.deleteById(myid);
-    }
-
     public User findByUserName(String UserName){
         return userRepositry.findByUserName(UserName);
     }

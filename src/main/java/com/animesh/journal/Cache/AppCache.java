@@ -4,7 +4,6 @@ import com.animesh.journal.Entity.ConfigJournalApp;
 import com.animesh.journal.repositry.ConfigJournalAppRepositry;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;

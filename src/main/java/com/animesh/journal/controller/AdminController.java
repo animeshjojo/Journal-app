@@ -2,6 +2,7 @@ package com.animesh.journal.controller;
 
 import com.animesh.journal.Entity.User;
 import com.animesh.journal.services.UserService;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +29,7 @@ public class AdminController {
     }
 
     @PostMapping("/create-admin")
-    public ResponseEntity<?> createAdmin(@RequestBody User user){
+    public ResponseEntity<Response> createAdmin(@RequestBody User user){
         userservice.createAdmin(user);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
